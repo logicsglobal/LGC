@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+#  lgcd The Lgc Core server.
+#
+#
+# chkconfig: 345 80 20
+# description: lgcd
+# processname: lgcd
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+# you can override defaults in /etc/sysconfig/lgcd, see below
+if [ -f /etc/sysconfig/lgcd ]; then
+        . /etc/sysconfig/lgcd
+fi
+
+RETVAL=0
+
+prog=lgcd
+# you can override the lockfile via BITCOIND_LOCKFILE in /etc/sysconfig/lgcd
+lockfile=${BITCOIND_LOCKFILE-/var/lock/subsys/lgcd}
+
+# lgcd defaults to /usr/bin/lgcd, override with BITCOIND_BIN
+lgcd=${BITCOIND_BIN-/usr/bin/lgcd}
+
+# lgcd opts default to -disablewallet, override with BITCOIND_OPTS
+lgcd_opts=${BITCOIND_OPTS--disablewallet}
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon $DAEMONOPTS $lgcd $lgcd_opts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status $prog
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: service $prog {start|stop|status|restart}"
+        exit 1
+        ;;
+esac

@@ -1,0 +1,22 @@
+[Unit]
+Description=Lgc's distributed currency daemon
+After=network.target
+
+[Service]
+User=lgccore
+Group=lgccore
+
+Type=forking
+PIDFile=/var/lib/lgcd/lgcd.pid
+ExecStart=/usr/bin/lgcd -daemon -pid=/var/lib/lgcd/lgcd.pid \
+-conf=/etc/lgccore/lgc.conf -datadir=/var/lib/lgcd -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
