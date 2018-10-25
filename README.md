@@ -75,3 +75,4 @@ Translations are periodically pulled from Transifex and merged into the git repo
 pull from Transifex would automatically overwrite them again.
 
 Translators should also follow the [forum](https://www.logicsglobal.org/forum/topic/logicsglobal-worldwide-collaboration.88/).
+"# LGC" 
